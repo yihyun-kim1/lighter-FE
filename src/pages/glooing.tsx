@@ -696,7 +696,7 @@ export default function Writer() {
                 <div className="flex flex-col bg-white w-[264px] max-w-[328px] py-[20px] min-h-[171px] max-h-[500px] text-center justify-center items-center rounded-lg z-50">
                   <div className="text-center items-center flex flex-col">
                     <div className="text-[15px] font-bold mb-[2px]">
-                      {writingInfo?.data?.writings.length + 1}번째
+                      {writingInfo?.data?.writings.length}번째
                     </div>
                     <div className="text-[15px] mb-[6px]">
                       글 등록을 완료했어요!

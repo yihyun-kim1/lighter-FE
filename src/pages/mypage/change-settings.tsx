@@ -115,18 +115,20 @@ export default function ChangeSettings() {
                     설정
                   </div>
                 </div>
-                <div className="flex text-[15px] lg:text-[20px] cursor-pointer lg:mt-[20px]">
-                  글쓰기 시간을 변경할 수 있어요. (
-                  {writingInfo?.data?.modifyingCount}/3)
+                <div className="flex text-[15px] lg:text-[20px] cursor-pointer text-[#918A7C] lg:mt-[20px]">
+                  글쓰기 시간은 세션당 1번만 변경할 수 있어요.
+                  {/* (
+                  {writingInfo?.data?.modifyingCount}
+                  ) */}
                 </div>
-                <div
+                {/* <div
                   className="flex text-[14px] cursor-pointer mt-[8px]"
                   style={{ color: "#918A7C" }}
                 >
                   *주 최대 2회 변경 가능하며, 설정을 변경한 날은 글을 쓸 수
                   없어요.
                   <br />
-                </div>
+                </div> */}
                 <div className="w-[250px] mt-[30px] flex flex-row gap-x-[14px]">
                   <button
                     className={`w-[60px] h-[30px] border-1 rounded-md ${
