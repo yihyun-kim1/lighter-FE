@@ -170,6 +170,7 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
         width="105"
         height="35"
         alt="Logo"
+        // onClick={() => router.push("/")}
       />
       <Image
         className="lg:hidden block h-[18px] w-[18px]"

@@ -76,20 +76,26 @@ export default function Home({ initialLoginState }: any) {
           isLoggedIn: true,
         });
         if (data?.data?.isSignUp === true) {
-          // 신규 회원가입인 경우
+          // 신규 회원가입인 경우 1
           router.push({
             pathname: "/session-settings",
           });
         } else if (data?.data?.hasOnProcessedWritingSession === true) {
+          // 신규 아니고 + 세션 있음 2-a
           router.push({
             pathname: "/glooing",
           });
         }
-        //진행중인 세션이 없고 + 회원가입이 아닌 경우
-        else if (data?.data?.hasOnProcessedWritingSession === false) {
+        // 신규 아니고 + 세션 여부 2-b
+        else if (
+          data?.data?.writingSession.length > 0 &&
+          data?.data?.hasOnProcessedWritingSession === false
+        ) {
           router.push({
             pathname: "/completed",
           });
+        } else {
+          router.push({ pathname: "session-settings" });
         }
       }
     } catch (error) {

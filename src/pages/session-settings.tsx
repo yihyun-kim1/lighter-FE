@@ -84,7 +84,7 @@ export default function Settings() {
 
   return (
     <div className="flex flex-col my-[50px] w-full">
-      <style>{`body { background: #F2EBDD; margin: 0; height: 100%; }`}</style>
+      <style>{`body { background: #F2EBDD; margin: 0; height: 100%; color: black;}`}</style>
       <div className="flex flex-row mx-auto w-full">
         <div className="flex flex-col w-full mx-[120px]">
           <div className="flex flex-row justify-between">
