@@ -88,7 +88,7 @@ export default function Home({ initialLoginState }: any) {
         }
         // 신규 아니고 + 세션 여부 2-b
         else if (
-          data?.data?.writingSession.length > 0 &&
+          data?.data?.writingSession &&
           data?.data?.hasOnProcessedWritingSession === false
         ) {
           router.push({

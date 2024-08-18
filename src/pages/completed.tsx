@@ -1,13 +1,9 @@
 "use client";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import "./globals.css";
 import { useAtom } from "jotai";
-import {
-  accessTokenAtom,
-  sessionDataAtom,
-  useUserInfoAtom,
-} from "../../public/atoms";
+import { accessTokenAtom, sessionDataAtom } from "../../public/atoms";
 import { formatDate, useMenu } from "../../public/utils/utils";
 import MenuWithTopbar from "@/components/MenuWithTopbar";
 import { CardProps, ProgressProps } from "../../interface";
