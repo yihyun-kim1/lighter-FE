@@ -163,9 +163,9 @@ export default function Settings() {
                         className={`w-[82px] h-[40px] border-1 rounded-md ${
                           period === 3 ? "bg-black text-white" : " bg-white"
                         }`}
-                        onClick={() => setPeriod(3)}
+                        onClick={() => setPeriod(100)}
                       >
-                        3일
+                        100일
                       </button>
                     </div>
                   </div>
