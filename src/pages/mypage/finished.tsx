@@ -64,12 +64,6 @@ export default function MyBook() {
       session?.progressPercentage >= 75 && session?.status === "completed"
   );
 
-  useEffect(() => {
-    console.log(userInfo);
-    console.log(writingInfo);
-    console.log(accessTokenAtom);
-  }, [userInfo, writingInfo]);
-
   return (
     <div className="flex flex-col my-[50px] w-full">
       <style>{`body { background: #F2EBDD; margin: 0; height: 100%; }`}</style>

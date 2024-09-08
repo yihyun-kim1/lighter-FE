@@ -31,15 +31,6 @@ export default function Settings() {
 
   const [accessToken] = useAtom(accessTokenAtom);
 
-  useEffect(() => {
-    console.log("subject updated:", subject);
-    console.log("period updated:", period);
-    console.log("page updated:", page);
-    console.log("start_time updated:", startAt);
-    console.log("for_hours updated:", writingHours);
-  }, [subject, period, page, startAt, writingHours]);
-
-  // 시작하기 버튼 클릭 시 서버로 설정된 값들을 전송
   const isPageValid = page < 10; // 10 미만이면 필수 필드 채워지지 않은 것으로 간주
   const handleStart = async () => {
     let adjustedHour = startAt[1] || 0; // 초기값은 그대로
@@ -67,7 +58,6 @@ export default function Settings() {
         accessToken
       );
 
-      console.log(response.data, "============");
       setIsFirst(true);
       router.push({
         pathname: "/glooing",
@@ -75,7 +65,6 @@ export default function Settings() {
           isFirst: isFirst,
         },
       });
-      // 서버 응답에 따른 처리 추가
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
@@ -194,13 +183,13 @@ export default function Settings() {
                       </button>
                       <button
                         className={`w-[82px] h-[40px] border-1 rounded-md ${
-                          page === 3 ? "bg-black text-white" : " bg-white"
+                          page === 100 ? "bg-black text-white" : " bg-white"
                         }`}
                         onClick={() => {
-                          setPage(3);
+                          setPage(100);
                         }}
                       >
-                        3편
+                        100편
                       </button>
                       <textarea
                         className={`w-[82px] flex text-center items-center justify-center h-[40px] border-1 border-black rounded-lg`}
@@ -209,7 +198,7 @@ export default function Settings() {
                         onChange={(e) => {
                           setPage(0);
                           const inputValue = e.target.value;
-                          const numericValue = parseInt(inputValue, 10); // 문자열을 숫자로 변환
+                          const numericValue = parseInt(inputValue, 10);
                           // 숫자로 변환 가능한 경우에만 set
                           if (!isNaN(numericValue) && numericValue >= 10) {
                             setPage(numericValue);

@@ -111,7 +111,6 @@ export const NewWriting = () => {
         writingIdStr,
         accessToken
       );
-      console.log("Submitted Data ---- ", response);
 
       const currentURL = window.location.href;
       const newURL = `${currentURL}`;

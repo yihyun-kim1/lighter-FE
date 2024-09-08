@@ -65,7 +65,6 @@ export default function UnfinishedSettings() {
         accessToken
       );
 
-      console.log(response.data, "============");
       setIsFirst(true);
       router.push({
         pathname: "/glooing",
@@ -167,7 +166,6 @@ export default function UnfinishedSettings() {
                           const numericValue = parseInt(inputValue, 10);
                           if (!isNaN(numericValue) && numericValue > 0) {
                             setPeriod(numericValue);
-                            console.log(numericValue, typeof numericValue);
                           }
                         }}
                       ></textarea>

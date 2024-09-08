@@ -1,8 +1,7 @@
 "use client";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import "../globals.css";
-import Image from "next/image";
 import { useAtom } from "jotai";
 import {
   accessTokenAtom,
@@ -25,10 +24,6 @@ export default function NewBook() {
   const writingInfo = useWritingDataAtom();
   const [sessionData] = useAtom(sessionDataAtom);
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
-
-  useEffect(() => {
-    console.log(sessionData);
-  }, [userInfo, writingInfo]);
 
   return (
     <div className="flex flex-col my-[50px] w-full">

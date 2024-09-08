@@ -43,7 +43,7 @@ const UnfinishedItem = (data: UserInfo) => {
       ) : (
         <div
           style={{ color: "#D5C8AE" }}
-          className="text-[18px] lg:text-[20px]"
+          className="text-[18px] font-bold lg:text-[20px]"
         >
           아직 못다쓴 책이 없어요.
         </div>
@@ -65,12 +65,6 @@ export default function UnfinishedBook() {
   );
 
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
-
-  useEffect(() => {
-    console.log(userInfo);
-    console.log(writingInfo);
-    console.log(accessTokenAtom);
-  }, []);
 
   return (
     <div className="flex flex-col my-[50px] w-full">

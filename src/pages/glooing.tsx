@@ -77,8 +77,6 @@ const EditModal: React.FC<ModalProps> = ({
   };
 
   const handleEditPost = async () => {
-    console.log("EDIT");
-    // 모달 열기 전에 확인 모달을 띄우도록 수정
     setIsConfirmationModal2Open(true);
   };
 
@@ -141,7 +139,6 @@ const EditModal: React.FC<ModalProps> = ({
               // 최대 입력 글자수 - 4000자로 제한
               if (inputValue.length <= 4000) {
                 setContent(inputValue);
-                console.log(content, "content");
               }
             }}
           />
@@ -370,7 +367,6 @@ export default function Writer() {
     try {
       const response = await startWriting(writingInfo?.data?.id, accessToken);
       const newWritingId = response?.data?.writing?.id;
-      console.log(writingId, "========ㄴ");
       if (newWritingId) {
         setWritingId(newWritingId);
         router.push({
@@ -424,14 +420,12 @@ export default function Writer() {
     setIsFirstModalOpen(false);
   };
 
-  // 수정할 글 클릭했을 때
+  // 수정할 글 클릭
   const handleEditClick = async (writingId: string) => {
     try {
-      console.log(writingId, "0");
       const writingData = await getWritingInfo(writingId, accessToken);
       setEditData(writingData?.data);
       setSelectedWritingId(writingData?.data?.id);
-      console.log("writing?", writingData?.data, writingId, selectedWritingId);
       setIsEditModalOpen(true);
     } catch (error) {
       console.error("Error fetching writing data:", error);

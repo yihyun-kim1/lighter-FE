@@ -16,8 +16,6 @@ export default function Home({ initialLoginState }: any) {
   const router = useRouter();
   const [loginState, setLoginState] = useAtom(loginAtom);
   const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
-  const [sessionData, setSessionData] = useAtom(sessionDataAtom);
-  const userInfo = useUserInfoAtom();
   const APP_KEY = "67511eea297fb0f856f791b369c67355";
   const REDIRECT_URI = "https://lighter-client.vercel.app";
   // const REDIRECT_URI = "http://localhost:8000";
@@ -26,7 +24,6 @@ export default function Home({ initialLoginState }: any) {
   useEffect(() => {
     if (initialLoginState) {
       setLoginState(initialLoginState);
-      console.log(initialLoginState, "initial state");
     }
   }, [initialLoginState]);
 

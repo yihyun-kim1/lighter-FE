@@ -14,7 +14,6 @@ export const useMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
   const toggleMenu = () => {
     setShowMenu((prevShowMenu) => !prevShowMenu);
-    console.log(showMenu, "showMenu");
   };
 
   return { showMenu, setShowMenu, toggleMenu, router };

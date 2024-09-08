@@ -27,7 +27,6 @@ export default function SelectedItemDetail() {
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
   const [sessionData] = useAtom(sessionDataAtom);
 
-  console.log(sessionData, "detail?");
   useEffect(() => {
     setAccessToken(accessToken);
   }, [accessToken, setAccessToken]);

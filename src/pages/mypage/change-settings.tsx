@@ -44,7 +44,6 @@ export default function ChangeSettings() {
       }
       try {
         const currentSessionInfo = await getCurrentSessions(accessToken);
-        console.log("현재 글쓰기 데이터 정보: ", currentSessionInfo);
         setCurrentSessionInfo(currentSessionInfo);
         setChangedData({
           page: currentSessionInfo?.data?.page,
@@ -65,12 +64,7 @@ export default function ChangeSettings() {
     fetchUserData();
   }, []);
 
-  useEffect(() => {
-    console.log("loginState 변경 ---------", loginState);
-  }, [loginState]);
-
   const changeSessionSettings = async () => {
-    console.log("바꿀 설정 정보: ", changedData);
     if (!accessToken) {
       console.error("Access token is not available");
       return;
