@@ -1,3 +1,8 @@
+export interface LoginState {
+  isLoggedIn: boolean;
+  accessToken: string | null;
+}
+
 export interface StartAt {
   hour: number;
   minute: number;
@@ -41,7 +46,7 @@ export interface SessionInfo {
   writings: Writing[];
 }
 
-interface Writing {
+export interface Writing {
   content: string;
   createdAt: string;
   id: number;
@@ -99,10 +104,10 @@ export interface BadgeItemProps {
     imageUrl: string;
     name: string;
   };
-  badgeId: number;
+  badgeId?: number;
   createdAt: string;
-  id: string;
-  userId: string;
+  id?: number;
+  userId?: string;
 }
 
 export interface EditData {

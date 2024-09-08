@@ -28,7 +28,7 @@ const FinishedItem = ({ data }: UserInfo) => {
   return (
     <div className="container space-between flex-wrap xl:flex-nowrap gap-x-[30px] flex flex-row max-h-[643px] overflow-y-auto mb-[21px]">
       {filteredWritingSessions && filteredWritingSessions?.length > 0 ? (
-        filteredWritingSessions.map((session: any) => (
+        filteredWritingSessions.map((session: SessionInfo) => (
           <div key={session.id} className="mt-2 flex flex-row gap-x-[46px]">
             <BookItem
               id={session?.id}

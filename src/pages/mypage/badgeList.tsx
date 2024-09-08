@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import { useAtom } from "jotai";
 import {
   accessTokenAtom,
@@ -16,7 +16,6 @@ import { SideMenu } from "@/components/SideMenu";
 export default function BadgeList() {
   const router = useRouter();
   const [accessToken] = useAtom(accessTokenAtom);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const userInfo = useUserInfoAtom();
   const [loginState, setLoginState] = useAtom(loginAtom);
   const { showMenu, setShowMenu, toggleMenu } = useMenu();

@@ -2,6 +2,7 @@ import { loginAtom } from "../atoms";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { LoginState } from "../../interface";
 
 export const imageUrls = [
   "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_1.png",
@@ -28,7 +29,7 @@ export function formatDate(dateString: string | undefined): string {
   return `${year}/${month}/${day}`;
 }
 
-export const getInitialLoginState = () => {
+export const getInitialLoginState = (): LoginState => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("access_token");
     return {

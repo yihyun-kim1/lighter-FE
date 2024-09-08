@@ -5,11 +5,9 @@ import "../globals.css";
 import { useAtom } from "jotai";
 import {
   accessTokenAtom,
-  loginAtom,
   sessionDataAtom,
   useUserInfoAtom,
   useWritingDataAtom,
-  writingDataAtom,
 } from "../../../public/atoms";
 import {
   formatDate,
@@ -18,12 +16,12 @@ import {
 } from "../../../public/utils/utils";
 import BookItem from "@/components/BookItem";
 import MenuWithTopbar from "@/components/MenuWithTopbar";
+import { Writing } from "../../../interface";
 
 export default function SelectedItemDetail() {
   const router = useRouter();
   const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
   const userInfo = useUserInfoAtom();
-  const writingInfo = useWritingDataAtom();
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
   const [sessionData] = useAtom(sessionDataAtom);
 
@@ -112,7 +110,7 @@ export default function SelectedItemDetail() {
                   {sessionData && sessionData?.progressPercentage > 0 ? (
                     <div className="flex flex-col gap-y-2 lg:gap-y-4 my-5 overflow-y-scroll rounded-xl">
                       {sessionData?.writings?.map(
-                        (writing: any, index: number) => (
+                        (writing: Writing, index: number) => (
                           <div
                             key={index}
                             className="flex cursor-pointer px-5 py-5 flex-row w-full h-52 rounded-xl"

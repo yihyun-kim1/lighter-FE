@@ -1,24 +1,24 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import "./globals.css";
 import Image from "next/image";
 import Script from "next/script";
 import { useAtom } from "jotai";
-import {
-  accessTokenAtom,
-  loginAtom,
-  sessionDataAtom,
-  useUserInfoAtom,
-} from "../../public/atoms";
+import { accessTokenAtom, loginAtom } from "../../public/atoms";
+import { LoginState } from "../../interface";
 
-export default function Home({ initialLoginState }: any) {
+interface HomeProps {
+  initialLoginState: LoginState;
+}
+
+export default function Home({ initialLoginState }: HomeProps) {
   const router = useRouter();
+  const [code, setCode] = useState<string | null>(null);
   const [loginState, setLoginState] = useAtom(loginAtom);
   const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
   const APP_KEY = "67511eea297fb0f856f791b369c67355";
   const REDIRECT_URI = "https://lighter-client.vercel.app";
-  // const REDIRECT_URI = "http://localhost:8000";
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${APP_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   useEffect(() => {
@@ -102,16 +102,20 @@ export default function Home({ initialLoginState }: any) {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get("code");
+    const codeFromUrl = searchParams.get("code");
 
-    if (code) {
-      getToken(code);
+    if (codeFromUrl) {
+      setCode(codeFromUrl);
+      getToken(codeFromUrl);
     }
   }, []);
 
-  const handleLoginClick = (code: any) => {
-    window.location.href = link;
-    getToken(code);
+  const handleLoginClick = () => {
+    if (code) {
+      getToken(code);
+    } else {
+      window.location.href = link;
+    }
   };
 
   return (
@@ -138,6 +142,7 @@ export default function Home({ initialLoginState }: any) {
               <div className="flex items-start lg:items-end lg:w-[876px] w-[541px] lg:h-[657px] h-[405px] border-1">
                 <Image
                   src="https://gloo-image-bucket.s3.amazonaws.com/archive/badges.svg"
+                  priority
                   width="875"
                   height="657"
                   alt="Badges"
@@ -155,7 +160,7 @@ export default function Home({ initialLoginState }: any) {
                 <button
                   className="rounded-xl w-[200px] h-[42px] text-black"
                   style={{ backgroundColor: "#FFE000" }}
-                  onClick={(code) => handleLoginClick(code)}
+                  onClick={handleLoginClick}
                 >
                   카카오 로그인
                 </button>

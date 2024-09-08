@@ -12,6 +12,7 @@ interface MenuProps {
   handleLogIn?: () => void;
   accessToken: string | null;
   router: NextRouter;
+  btnWord?: string;
 }
 
 const MenuItem: React.FC<{
@@ -46,7 +47,11 @@ const SubMenuItem: React.FC<{
   </div>
 );
 
-export const Menubar: React.FC<MenuProps> = ({ showMenu, setShowMenu }) => {
+export const Menubar: React.FC<MenuProps> = ({
+  showMenu,
+  setShowMenu,
+  btnWord,
+}) => {
   const router = useRouter();
   const [loginState, setLoginState] = useAtom(loginAtom);
   const handleToggleLogin = toggleLoginState();
@@ -125,7 +130,7 @@ export const Menubar: React.FC<MenuProps> = ({ showMenu, setShowMenu }) => {
             className="text-[#858178] text-[20px] cursor-pointer"
             onClick={handleToggleLogin}
           >
-            {loginState.isLoggedIn === true ? "로그아웃" : "로그인"}
+            {btnWord}
           </div>
         </div>
       </div>
@@ -142,6 +147,7 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
   router,
 }) => {
   const [loginState, setLoginState] = useAtom(loginAtom);
+  const [btnWord, setBtnWord] = useState("");
   const isCurrentPath = (path: string) => router.pathname === path;
   const handleToggleLogin = toggleLoginState();
 
@@ -153,11 +159,13 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
           accessToken: token,
           isLoggedIn: true,
         });
+        setBtnWord("로그아웃");
       } else {
         setLoginState({
           accessToken: null,
           isLoggedIn: false,
         });
+        setBtnWord("로그인");
       }
     }
   }, [setLoginState]);
@@ -170,7 +178,6 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
         width="105"
         height="35"
         alt="Logo"
-        // onClick={() => router.push("/")}
       />
       <Image
         className="lg:hidden block h-[18px] w-[18px]"
@@ -187,6 +194,7 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
           setShowMenu={setShowMenu}
           accessToken={accessToken}
           router={router}
+          btnWord={btnWord}
         />
       )}
       <div className="hidden lg:block flex-row">
@@ -220,7 +228,7 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
           나의 보관함
         </a>
         <a className="cursor-pointer" onClick={handleToggleLogin}>
-          {loginState.isLoggedIn === true ? "로그아웃" : "로그인"}
+          {btnWord}
         </a>
       </div>
     </div>
