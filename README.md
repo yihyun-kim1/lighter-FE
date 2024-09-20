@@ -20,6 +20,7 @@
 
 ## Tech Stack
 Next.js / React.js / TypeScript / Jotai / Tailwind CSS
+<br/>
 Figma / Git / Github / AWS(S3) / Vercel Deploy
 <br/>
 <br/>
