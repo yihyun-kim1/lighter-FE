@@ -11,7 +11,11 @@ import {
 } from "../../../public/atoms";
 import BookItem from "../../components/BookItem";
 import { SessionInfo, UserInfo } from "../../../interface";
-import { formatDate, useMenu } from "../../../public/utils/utils";
+import {
+  formatDate,
+  getRandomImageUrl,
+  useMenu,
+} from "../../../public/utils/utils";
 import MenuWithTopbar from "@/components/MenuWithTopbar";
 import { SideMenu } from "@/components/SideMenu";
 
@@ -21,20 +25,10 @@ const UnfinishedItem = (data: UserInfo) => {
       session.progressPercentage < 75 && session.status === "aborted"
   );
 
-  const imageUrls = [
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_1.png",
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_2.png",
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_3.png",
-  ];
-
-  const getRandomImageUrl = () => {
-    return imageUrls[Math.floor(Math.random() * imageUrls.length)];
-  };
-
   return (
     <div className="container space-between flex-wrap xl:flex-nowrap gap-x-[30px] flex flex-row max-h-[643px] overflow-y-auto mb-[21px]">
       {filteredWritingSessions && filteredWritingSessions?.length > 0 ? (
-        filteredWritingSessions.map((session: any) => (
+        filteredWritingSessions.map((session: SessionInfo) => (
           <div key={session.id} className="mt-2 flex flex-row gap-x-[46px]">
             <BookItem
               id={session?.id}
@@ -49,7 +43,7 @@ const UnfinishedItem = (data: UserInfo) => {
       ) : (
         <div
           style={{ color: "#D5C8AE" }}
-          className="text-[18px] lg:text-[20px]"
+          className="text-[18px] font-bold lg:text-[20px]"
         >
           아직 못다쓴 책이 없어요.
         </div>
@@ -71,12 +65,6 @@ export default function UnfinishedBook() {
   );
 
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
-
-  useEffect(() => {
-    console.log(userInfo);
-    console.log(writingInfo);
-    console.log(accessTokenAtom);
-  }, []);
 
   return (
     <div className="flex flex-col my-[50px] w-full">
@@ -106,7 +94,7 @@ export default function UnfinishedBook() {
                   <div className="lg:block hidden w-full text-black mt-[8px] lg:text-[32px] text-[25px] font-bold">
                     못다쓴 책 ({filteredWritingSessions?.length})
                   </div>
-                  <div className="lg:block hidden w-full mt-2">
+                  <div className="text-[15px] lg:text-[20px] w-full mt-2">
                     글쓰기 달성 완료하지 못한 게시글을 이어서 작성할 수 있어요.
                   </div>
                 </div>

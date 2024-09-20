@@ -9,7 +9,6 @@ export const getLoginInfo = async (code: string) => {
     const response = await axios.get(
       `${apiUrl}/account/users/sign-in/kakao?code=${code}`
     );
-    console.log("LoginInfo============", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -20,13 +19,11 @@ export const getLoginInfo = async (code: string) => {
 // 글쓰기 설정하는 API
 export const postSetUp = async (data: EditOrSetData, accessToken: string) => {
   try {
-    console.log(accessToken, "APIAPIAPI");
     const response = await axios.post(`${apiUrl}/writing-session`, data, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log("설정 정보============", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -43,7 +40,6 @@ export const getGlooingInfo = async (accessToken: string) => {
       },
     };
     const response = await axios.get(`${apiUrl}/api/glooing/writings`, config);
-    console.log("설정 정보 ============", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -98,7 +94,6 @@ export const startWriting = async (id: string, accessToken: string) => {
         },
       }
     );
-    console.log("글쓰기 시작============", response.data, id);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -122,7 +117,6 @@ export const temporarySaveWriting = async (
         },
       }
     );
-    console.log("임시 저장한 데이터", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -136,7 +130,6 @@ export const submitWriting = async (
   writingId: string,
   accessToken: string
 ) => {
-  console.log(writingId, "idididid");
   try {
     const response = await axios.put(
       `${apiUrl}/writings/${writingId}/submit`,
@@ -147,7 +140,6 @@ export const submitWriting = async (
         },
       }
     );
-    console.log("포스팅한 글 내용 ============", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -164,7 +156,6 @@ export const getWritingInfo = async (id: string, accessToken: string) => {
       },
     };
     const response = await axios.get(`${apiUrl}/writings/${id}`, config);
-    console.log("클릭한 글 정보", id, response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -184,7 +175,6 @@ export const putWriting = async (
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(response.data, "수정된 데이터 -----------");
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -204,7 +194,6 @@ export const editWritingSetUp = async (
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(response.data, "수정된 설정값 -----------");
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -228,7 +217,6 @@ export const unfinishedWritingSetUp = async (
         },
       }
     );
-    console.log(response.data, "못다쓴 책 재설정 -----------");
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);

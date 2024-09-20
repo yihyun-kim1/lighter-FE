@@ -12,9 +12,46 @@ interface MenuProps {
   handleLogIn?: () => void;
   accessToken: string | null;
   router: NextRouter;
+  btnWord?: string;
 }
 
-export const Menubar: React.FC<MenuProps> = ({ showMenu, setShowMenu }) => {
+const MenuItem: React.FC<{
+  path: string;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}> = ({ path, label, isActive, onClick }) => (
+  <div
+    className={`text-[20px] cursor-pointer ${
+      isActive ? "text-[#CEB292]" : "text-[#858178]"
+    }`}
+    onClick={onClick}
+  >
+    {label}
+  </div>
+);
+
+const SubMenuItem: React.FC<{
+  path: string;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}> = ({ path, label, isActive, onClick }) => (
+  <div
+    className={`text-[16px] cursor-pointer ${
+      isActive ? "text-white" : "text-[#858178]"
+    }`}
+    onClick={onClick}
+  >
+    {label}
+  </div>
+);
+
+export const Menubar: React.FC<MenuProps> = ({
+  showMenu,
+  setShowMenu,
+  btnWord,
+}) => {
   const router = useRouter();
   const [loginState, setLoginState] = useAtom(loginAtom);
   const handleToggleLogin = toggleLoginState();
@@ -47,92 +84,53 @@ export const Menubar: React.FC<MenuProps> = ({ showMenu, setShowMenu }) => {
         style={{ zIndex: 10 }}
       >
         <div className="flex flex-col gap-y-4 ml-[60px] mt-[140px] justify-center">
-          <div
-            className={`text-[20px] cursor-pointer ${
-              isCurrentPath("/glooing") ? "text-[#CEB292]" : "text-[#858178]"
-            }`}
-            onClick={() =>
-              router.push({
-                pathname: "/glooing",
-              })
-            }
-          >
-            글루ING
-          </div>
-          <div
-            className={`text-[20px] cursor-pointer ${
+          <MenuItem
+            path="/glooing"
+            label="글루ING"
+            isActive={isCurrentPath("/glooing")}
+            onClick={() => router.push("/glooing")}
+          />
+          <MenuItem
+            path="/mypage/badgeList"
+            label="나의 보관함"
+            isActive={
               isCurrentPath("/mypage/badgeList") ||
               isCurrentPath("/mypage/finished") ||
               isCurrentPath("/mypage/unfinished")
-                ? "text-[#CEB292]"
-                : "text-[#858178]"
-            }`}
-          >
-            나의 보관함
-          </div>
-          <div className="flex flex-col ml-3 gap-y-3">
-            <div
-              className={`text-[16px] cursor-pointer ${
-                isCurrentPath("/mypage/badgeList")
-                  ? "text-white"
-                  : "text-[#858178] "
-              }`}
-              onClick={() =>
-                router.push({
-                  pathname: "/mypage/badgeList",
-                })
-              }
-            >
-              - 나의 뱃지
-            </div>
-            <div
-              className={`text-[16px] cursor-pointer ${
-                isCurrentPath("/mypage/finished")
-                  ? "text-white"
-                  : "text-[#858178] "
-              }`}
-              onClick={() =>
-                router.push({
-                  pathname: "/mypage/finished",
-                })
-              }
-            >
-              - 내가 발행한 책
-            </div>
-            <div
-              className={`text-[16px] cursor-pointer ${
-                isCurrentPath("/mypage/unfinished")
-                  ? "text-white"
-                  : "text-[#858178] "
-              }`}
-              onClick={() =>
-                router.push({
-                  pathname: "/mypage/unfinished",
-                })
-              }
-            >
-              - 못다쓴 책
-            </div>
-          </div>
-          <div
-            className={`text-[20px] cursor-pointer ${
-              isCurrentPath("/mypage/change-settings")
-                ? "text-[#CEB292]"
-                : "text-[#858178]"
-            }`}
-            onClick={() =>
-              router.push({
-                pathname: "/mypage/change-settings",
-              })
             }
-          >
-            설정
+            onClick={() => router.push("/mypage/badgeList")}
+          />
+          <div className="flex flex-col ml-3 gap-y-3">
+            <SubMenuItem
+              path="/mypage/badgeList"
+              label="- 나의 뱃지"
+              isActive={isCurrentPath("/mypage/badgeList")}
+              onClick={() => router.push("/mypage/badgeList")}
+            />
+            <SubMenuItem
+              path="/mypage/finished"
+              label="- 내가 발행한 책"
+              isActive={isCurrentPath("/mypage/finished")}
+              onClick={() => router.push("/mypage/finished")}
+            />
+            <SubMenuItem
+              path="/mypage/unfinished"
+              label="- 못다쓴 책"
+              isActive={isCurrentPath("/mypage/unfinished")}
+              onClick={() => router.push("/mypage/unfinished")}
+            />
           </div>
+          <MenuItem
+            path="/mypage/change-settings"
+            label="설정"
+            isActive={isCurrentPath("/mypage/change-settings")}
+            onClick={() => router.push("/mypage/change-settings")}
+          />
           <div
             className="text-[#858178] text-[20px] cursor-pointer"
             onClick={handleToggleLogin}
           >
-            {loginState.isLoggedIn === true ? "로그아웃" : "로그인"}
+            {btnWord}
           </div>
         </div>
       </div>
@@ -149,6 +147,7 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
   router,
 }) => {
   const [loginState, setLoginState] = useAtom(loginAtom);
+  const [btnWord, setBtnWord] = useState("");
   const isCurrentPath = (path: string) => router.pathname === path;
   const handleToggleLogin = toggleLoginState();
 
@@ -160,11 +159,13 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
           accessToken: token,
           isLoggedIn: true,
         });
+        setBtnWord("로그아웃");
       } else {
         setLoginState({
           accessToken: null,
           isLoggedIn: false,
         });
+        setBtnWord("로그인");
       }
     }
   }, [setLoginState]);
@@ -193,6 +194,7 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
           setShowMenu={setShowMenu}
           accessToken={accessToken}
           router={router}
+          btnWord={btnWord}
         />
       )}
       <div className="hidden lg:block flex-row">
@@ -226,7 +228,7 @@ export const MenuWithTopbar: React.FC<MenuProps> = ({
           나의 보관함
         </a>
         <a className="cursor-pointer" onClick={handleToggleLogin}>
-          {loginState.isLoggedIn === true ? "로그아웃" : "로그인"}
+          {btnWord}
         </a>
       </div>
     </div>

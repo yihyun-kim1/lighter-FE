@@ -77,8 +77,6 @@ const EditModal: React.FC<ModalProps> = ({
   };
 
   const handleEditPost = async () => {
-    console.log("EDIT");
-    // 모달 열기 전에 확인 모달을 띄우도록 수정
     setIsConfirmationModal2Open(true);
   };
 
@@ -141,7 +139,6 @@ const EditModal: React.FC<ModalProps> = ({
               // 최대 입력 글자수 - 4000자로 제한
               if (inputValue.length <= 4000) {
                 setContent(inputValue);
-                console.log(content, "content");
               }
             }}
           />
@@ -224,7 +221,7 @@ export default function Writer() {
   const badgeCount = postedWriting?.newBadges?.length || 0;
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
   const [accessToken] = useAtom(accessTokenAtom);
-  const [writingInfoLoaded, setWritingInfoLoaded] = useState(false); // writingInfo가 로딩되었음을 나타내는 상태
+  const [writingInfoLoaded, setWritingInfoLoaded] = useState(false);
 
   useEffect(() => {
     if (badgeCount > 0) {
@@ -236,9 +233,7 @@ export default function Writer() {
 
   useEffect(() => {
     if (userInfo !== null && writingInfo !== null) {
-      console.log(userInfo);
-      console.log(writingInfo);
-      setWritingInfoLoaded(true); // writingInfo가 로딩된 후 상태 업데이트
+      setWritingInfoLoaded(true);
     }
   }, [userInfo, writingInfo]);
 
@@ -336,7 +331,6 @@ export default function Writer() {
   }, [buttonActivated, writingInfoLoaded]);
 
   useEffect(() => {
-    // currentWritings?.data?.isActivated 값이 true이면 버튼 활성화, false이면 비활성화
     if (writingInfo?.data?.isActivated === true) {
       setButtonActivated(true);
     } else {
@@ -373,7 +367,6 @@ export default function Writer() {
     try {
       const response = await startWriting(writingInfo?.data?.id, accessToken);
       const newWritingId = response?.data?.writing?.id;
-      console.log(writingId, "writingId === ??");
       if (newWritingId) {
         setWritingId(newWritingId);
         router.push({
@@ -412,18 +405,6 @@ export default function Writer() {
     }
   }, [router.query.mini]);
 
-  const handleCloseWriterModal = async () => {
-    try {
-      router.push({
-        pathname: "/glooing",
-      });
-    } catch (error) {
-      console.error("Error redirecting after closing writer modal:", error);
-    }
-    setIsWriterModalOpen(false);
-    if (isMiniModalOpen == true) setIsSubmissionSuccessful(true);
-  };
-
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     window.location.reload();
@@ -439,14 +420,12 @@ export default function Writer() {
     setIsFirstModalOpen(false);
   };
 
-  // 수정할 글 클릭했을 때
+  // 수정할 글 클릭
   const handleEditClick = async (writingId: string) => {
     try {
-      console.log(writingId, "0");
       const writingData = await getWritingInfo(writingId, accessToken);
       setEditData(writingData?.data);
       setSelectedWritingId(writingData?.data?.id);
-      console.log("writing?", writingData?.data, writingId, selectedWritingId);
       setIsEditModalOpen(true);
     } catch (error) {
       console.error("Error fetching writing data:", error);
@@ -700,33 +679,91 @@ export default function Writer() {
               </div>
             </div>
           )}
-          {isMiniModalOpen && (
+          {isMiniModalOpen &&
+            writingInfo?.data?.status == "onProcess" &&
+            completion_percentage < 100 && (
+              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+                <div
+                  className="absolute w-full h-full bg-gray-800 opacity-50"
+                  onClick={handleCloseMiniModal}
+                ></div>
+                <div className="flex flex-col bg-white w-[264px] max-w-[328px] py-[20px] min-h-[171px] max-h-[500px] text-center justify-center items-center rounded-lg z-50">
+                  <div className="text-center items-center flex flex-col">
+                    <div className="text-[15px] font-bold mb-[2px]">
+                      {writingInfo?.data?.writings.length}번째
+                    </div>
+                    <div className="text-[15px] mb-[6px]">
+                      글 등록을 완료했어요!
+                    </div>
+                    <div
+                      className="text-[13px] mb-[10px]"
+                      style={{ color: "#7F7F7F" }}
+                    >
+                      다음{" "}
+                      <a>
+                        {writingInfo?.data?.startAt?.hour}:
+                        {writingInfo?.data?.startAt?.minute === 0
+                          ? "00"
+                          : writingInfo?.data?.startAt?.minute}
+                      </a>
+                      에 꼭 다시 만나요!
+                    </div>
+                    {showBadge && (
+                      <div className="w-[140px] h-[148px] mb-[18px]">
+                        <Image
+                          src={
+                            postedWriting?.newBadges[badgeCount - 1]?.badge
+                              ?.imageUrl
+                          }
+                          width={152}
+                          height={153}
+                          alt={
+                            postedWriting?.newBadges[badgeCount - 1]?.badge
+                              ?.name
+                          }
+                        />
+                      </div>
+                    )}
+                    <div className="flex justify-center">
+                      <button
+                        className="w-[120px] text-[15px] font-bold cursor-pointer h-[40px] rounded-md"
+                        style={{ backgroundColor: "#FF8126" }}
+                        onClick={handleCloseMiniModal}
+                      >
+                        확인
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          {isMiniModalOpen && writingInfo?.data?.status == "aborted" && (
             <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
               <div
                 className="absolute w-full h-full bg-gray-800 opacity-50"
                 onClick={handleCloseMiniModal}
               ></div>
               <div className="flex flex-col bg-white w-[264px] max-w-[328px] py-[20px] min-h-[171px] max-h-[500px] text-center justify-center items-center rounded-lg z-50">
-                <div className="text-center items-center flex flex-col">
-                  <div className="text-[15px] font-bold mb-[2px]">
-                    {writingInfo?.data?.writings.length + 1}번째
-                  </div>
-                  <div className="text-[15px] mb-[6px]">
-                    글 등록을 완료했어요!
-                  </div>
-                  <div
-                    className="text-[13px] mb-[10px]"
-                    style={{ color: "#7F7F7F" }}
-                  >
-                    다음{" "}
-                    <a>
-                      {writingInfo?.data?.startAt?.hour}:
-                      {writingInfo?.data?.startAt?.minute === 0
-                        ? "00"
-                        : writingInfo?.data?.startAt?.minute}
-                    </a>
-                    에 꼭 다시 만나요!
-                  </div>
+                <div className="text-start items-start flex flex-col">
+                  {completion_percentage >= 75 ? (
+                    <div>
+                      <div className="text-[12px] items-start justify-start text-gray-400 mb-[2px]">
+                        축하합니다!
+                      </div>
+                      <div className="text-[15px] font-bold mb-[6px]">
+                        목표 {completion_percentage}% 달성으로 <br />
+                        글쓰기 도전에 성공했어요!
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="text-[15px] font-bold mb-[6px]">
+                        이번에 아쉽게 <br />
+                        글쓰기 도전이 끝났어요
+                      </div>
+                    </div>
+                  )}
+                  <hr className="w-full h-[1px] text-gray-400 py-2" />
                   {showBadge && (
                     <div className="w-[140px] h-[148px] mb-[18px]">
                       <Image
@@ -742,15 +779,47 @@ export default function Writer() {
                       />
                     </div>
                   )}
-                  <div className="flex justify-center">
-                    <button
-                      className="w-[120px] text-[15px] font-bold cursor-pointer h-[40px] rounded-md"
-                      style={{ backgroundColor: "#FF8126" }}
-                      onClick={handleCloseMiniModal}
-                    >
-                      확인
-                    </button>
-                  </div>
+                  {completion_percentage >= 75 ? (
+                    <div className="flex justify-center">
+                      <button
+                        className="w-[200px] text-[14px] cursor-pointer h-[40px] rounded-md bg-black text-white"
+                        onClick={() =>
+                          router.push({
+                            pathname: `/challenge/newBook`,
+                          })
+                        }
+                      >
+                        나만의 전자책 발행하기
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-y-2 justify-center">
+                      <button
+                        className="w-[200px] text-[14px] cursor-pointer h-[40px] rounded-md bg-black text-white"
+                        onClick={() =>
+                          router.push({
+                            pathname: `/mypage/unfinished`,
+                          })
+                        }
+                      >
+                        이어서 하기
+                      </button>
+                      <button
+                        className="w-[200px] text-[14px] cursor-pointer h-[40px] rounded-md bg-white text-black"
+                        style={{
+                          border: "1px solid black",
+                          borderColor: "black",
+                        }}
+                        onClick={() =>
+                          router.push({
+                            pathname: "/mypage/unfinished-settings",
+                          })
+                        }
+                      >
+                        새로운 도전하기
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

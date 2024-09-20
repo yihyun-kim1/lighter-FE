@@ -10,7 +10,11 @@ import {
   useWritingDataAtom,
 } from "../../../public/atoms";
 import BookItem from "../../components/BookItem";
-import { formatDate, useMenu } from "../../../public/utils/utils";
+import {
+  formatDate,
+  getRandomImageUrl,
+  useMenu,
+} from "../../../public/utils/utils";
 import { SessionInfo, UserInfo } from "../../../interface";
 import MenuWithTopbar from "@/components/MenuWithTopbar";
 import { SideMenu } from "@/components/SideMenu";
@@ -21,20 +25,10 @@ const FinishedItem = ({ data }: UserInfo) => {
       session?.progressPercentage >= 75 && session?.status === "completed"
   );
 
-  const imageUrls = [
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_1.png",
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_2.png",
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_3.png",
-  ];
-
-  const getRandomImageUrl = () => {
-    return imageUrls[Math.floor(Math.random() * imageUrls.length)];
-  };
-
   return (
     <div className="container space-between flex-wrap xl:flex-nowrap gap-x-[30px] flex flex-row max-h-[643px] overflow-y-auto mb-[21px]">
       {filteredWritingSessions && filteredWritingSessions?.length > 0 ? (
-        filteredWritingSessions.map((session: any) => (
+        filteredWritingSessions.map((session: SessionInfo) => (
           <div key={session.id} className="mt-2 flex flex-row gap-x-[46px]">
             <BookItem
               id={session?.id}
@@ -49,7 +43,7 @@ const FinishedItem = ({ data }: UserInfo) => {
       ) : (
         <div
           style={{ color: "#D5C8AE" }}
-          className="text-[18px] lg:text-[20px]"
+          className="mt-2 text-[15px] lg:text-[20px] font-bold"
         >
           아직 발행한 책이 없어요.
         </div>
@@ -69,12 +63,6 @@ export default function MyBook() {
     (session: SessionInfo) =>
       session?.progressPercentage >= 75 && session?.status === "completed"
   );
-
-  useEffect(() => {
-    console.log(userInfo);
-    console.log(writingInfo);
-    console.log(accessTokenAtom);
-  }, [userInfo, writingInfo]);
 
   return (
     <div className="flex flex-col my-[50px] w-full">

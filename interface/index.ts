@@ -1,3 +1,8 @@
+export interface LoginState {
+  isLoggedIn: boolean;
+  accessToken: string | null;
+}
+
 export interface StartAt {
   hour: number;
   minute: number;
@@ -38,9 +43,10 @@ export interface SessionInfo {
   updatedAt: string;
   userId: string;
   writingHours: number;
+  writings: Writing[];
 }
 
-interface Writing {
+export interface Writing {
   content: string;
   createdAt: string;
   id: number;
@@ -98,10 +104,10 @@ export interface BadgeItemProps {
     imageUrl: string;
     name: string;
   };
-  badgeId: number;
+  badgeId?: number;
   createdAt: string;
-  id: string;
-  userId: string;
+  id?: number;
+  userId?: string;
 }
 
 export interface EditData {
@@ -174,4 +180,14 @@ export interface ModalProps {
   remainingTime2?: RemainingTimeType;
   postedWriting: PostingInfo;
   setPostedWriting: React.Dispatch<React.SetStateAction<PostingInfo>>;
+}
+
+export interface ProgressProps {
+  progressPercentage: number | undefined;
+}
+
+export interface CardProps {
+  title: string;
+  description: string;
+  route: string;
 }

@@ -1,11 +1,11 @@
 import { getCurrentSessions, getUserInfo } from "@/api/api";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
-import { UserInfo, WritingData } from "../interface";
+import { SessionInfo, UserInfo, WritingData } from "../interface";
 import { getInitialLoginState } from "./utils/utils";
 
 export const accessTokenAtom = atom<string | null>(null);
-export const sessionDataAtom = atom<any>(null);
+
 export const remainingTimeAtom = atom(0);
 export const remainingTime2Atom = atom(0);
 
@@ -30,9 +30,11 @@ export const loginAtom = atom(
 
 export const userInfoAtom = atom<UserInfo | null>(null);
 export const writingDataAtom = atom<WritingData | null>(null);
+export const sessionDataAtom = atom<SessionInfo | null>(null);
 
 export const useUserInfoAtom = () => {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [sessionInfo, setSessionInfo] = useAtom(sessionDataAtom);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -41,6 +43,9 @@ export const useUserInfoAtom = () => {
         if (accessToken) {
           const userData = await getUserInfo(accessToken);
           setUserInfo(userData);
+          if (!sessionInfo) {
+            setSessionInfo(userData?.data?.writingSessions[0]);
+          }
         }
       } catch (error) {
         console.error("Error fetching user info:", error);

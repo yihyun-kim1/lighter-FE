@@ -8,8 +8,8 @@ import {
   loginAtom,
   remainingTime2Atom,
 } from "../../../public/atoms";
-import { putWriting, submitWriting } from "@/api/api";
-import React, { useState } from "react";
+import { putWriting, submitWriting, temporarySaveWriting } from "@/api/api";
+import React, { useEffect, useState } from "react";
 import MenuWithTopbar from "@/components/MenuWithTopbar";
 import { useMenu } from "../../../public/utils/utils";
 
@@ -31,6 +31,7 @@ export const NewWriting = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [remainingTime] = useAtom(remainingTime2Atom);
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = e.target.value;
 
@@ -40,6 +41,44 @@ export const NewWriting = () => {
       setTitle(inputText);
     }
   };
+
+  useEffect(() => {
+    const saveOnUnload = async () => {
+      if (accessToken && typeof writingId === "string") {
+        try {
+          await temporarySaveWriting(writingId, accessToken, {
+            title,
+            content,
+          });
+        } catch (error) {
+          console.error("임시 저장에 실패했습니다.", error);
+        }
+      }
+    };
+
+    window.addEventListener("beforeunload", saveOnUnload);
+
+    let intervalId: NodeJS.Timeout;
+    if (accessToken && typeof writingId === "string") {
+      intervalId = setInterval(async () => {
+        try {
+          await temporarySaveWriting(writingId, accessToken, {
+            title,
+            content,
+          });
+          console.log("임시 저장이 완료되었습니다.");
+        } catch (error) {
+          console.error("임시 저장에 실패했습니다.");
+        }
+      }, 30000); // 30초마다 호출
+    }
+
+    // 컴포넌트 언마운트 시 임시 저장 및 이벤트 리스너 제거
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      window.removeEventListener("beforeunload", saveOnUnload);
+    };
+  }, [writingId, accessToken, title, content]);
 
   const handlePost = async () => {
     // 모달 열기 전에 확인 모달을 띄우도록 수정
@@ -72,7 +111,6 @@ export const NewWriting = () => {
         writingIdStr,
         accessToken
       );
-      console.log("Submitted Data ---- ", response);
 
       const currentURL = window.location.href;
       const newURL = `${currentURL}`;

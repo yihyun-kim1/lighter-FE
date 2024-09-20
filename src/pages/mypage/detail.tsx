@@ -5,41 +5,29 @@ import "../globals.css";
 import { useAtom } from "jotai";
 import {
   accessTokenAtom,
-  loginAtom,
   sessionDataAtom,
   useUserInfoAtom,
   useWritingDataAtom,
 } from "../../../public/atoms";
-import { formatDate, useMenu } from "../../../public/utils/utils";
+import {
+  formatDate,
+  randomImageUrl,
+  useMenu,
+} from "../../../public/utils/utils";
 import BookItem from "@/components/BookItem";
 import MenuWithTopbar from "@/components/MenuWithTopbar";
+import { Writing } from "../../../interface";
 
-export default function MyBookItem() {
+export default function SelectedItemDetail() {
   const router = useRouter();
   const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
-  const [loginState, setLoginState] = useAtom(loginAtom);
   const userInfo = useUserInfoAtom();
-  const writingInfo = useWritingDataAtom();
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
   const [sessionData] = useAtom(sessionDataAtom);
-
-  const imageUrls = [
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_1.png",
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_2.png",
-    "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_3.png",
-  ];
-  const randomImageUrl =
-    imageUrls[Math.floor(Math.random() * imageUrls.length)];
 
   useEffect(() => {
     setAccessToken(accessToken);
   }, [accessToken, setAccessToken]);
-
-  useEffect(() => {
-    console.log(userInfo);
-    console.log(sessionData, writingInfo, "???????????");
-    console.log(accessTokenAtom);
-  }, [userInfo, writingInfo]);
 
   return (
     <div className="flex flex-col my-[50px] w-full">
@@ -69,18 +57,18 @@ export default function MyBookItem() {
                         border: "1px solid gray",
                       }}
                     >
-                      <div className="flex flex-row gap-x-[46px]">
-                        <BookItem
-                          id={sessionData?.id}
-                          imageUrl={randomImageUrl}
-                          title={sessionData?.subject}
-                          date={formatDate(
-                            writingInfo?.data?.nearestFinishDate
-                          )}
-                          username={userInfo?.data?.nickname}
-                          session={sessionData}
-                        />
-                      </div>
+                      {sessionData && (
+                        <div className="flex flex-row gap-x-[46px]">
+                          <BookItem
+                            id={sessionData?.id}
+                            imageUrl={randomImageUrl}
+                            title={sessionData?.subject}
+                            date={formatDate(sessionData?.nearestFinishDate)}
+                            username={userInfo?.data?.nickname}
+                            session={sessionData}
+                          />
+                        </div>
+                      )}
                     </div>
                     <div className="justify-end gap-y-2 flex flex-col">
                       <div
@@ -90,8 +78,8 @@ export default function MyBookItem() {
                         {formatDate(sessionData?.finishDate)} 완료
                       </div>
                       <div className="lg:text-[20px] text-[16px]">
-                        총 {sessionData?.writings?.length ?? 0}/
-                        {sessionData?.page}편
+                        총 {sessionData?.progressStep ?? 0}/{sessionData?.page}
+                        편
                       </div>
                       <div className="flex flex-row gap-x-5">
                         <button
@@ -100,28 +88,29 @@ export default function MyBookItem() {
                         >
                           목록으로 돌아가기
                         </button>
-                        {sessionData?.progressPercentage < 100 && (
-                          <button
-                            className="rounded-lg text-[14px] bg-orange-500 text-black lg:text-[16px] lg:rounded-xl w-[150px] lg:w-[200px] h-[30px] lg:h-[42px]"
-                            onClick={() =>
-                              router.push({
-                                pathname: "/mypage/unfinished-settings",
-                              })
-                            }
-                          >
-                            이어서 진행하기
-                          </button>
-                        )}
+                        {sessionData &&
+                          sessionData?.progressPercentage < 100 && (
+                            <button
+                              className="rounded-lg text-[14px] bg-orange-500 text-black lg:text-[16px] lg:rounded-xl w-[150px] lg:w-[200px] h-[30px] lg:h-[42px]"
+                              onClick={() =>
+                                router.push({
+                                  pathname: "/mypage/unfinished-settings",
+                                })
+                              }
+                            >
+                              이어서 진행하기
+                            </button>
+                          )}
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-col mt-[30px] max-h-[500px]">
                   <div className="font-bold text-[20px]">기록한 글</div>
-                  {sessionData?.writings ? (
+                  {sessionData && sessionData?.progressPercentage > 0 ? (
                     <div className="flex flex-col gap-y-2 lg:gap-y-4 my-5 overflow-y-scroll rounded-xl">
                       {sessionData?.writings?.map(
-                        (writing: any, index: number) => (
+                        (writing: Writing, index: number) => (
                           <div
                             key={index}
                             className="flex cursor-pointer px-5 py-5 flex-row w-full h-52 rounded-xl"

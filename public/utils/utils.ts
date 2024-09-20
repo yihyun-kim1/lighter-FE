@@ -2,13 +2,19 @@ import { loginAtom } from "../atoms";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { LoginState } from "../../interface";
+
+export const imageUrls = [
+  "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_1.png",
+  "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_2.png",
+  "https://gloo-image-bucket.s3.amazonaws.com/archive/cover_3.png",
+];
 
 export const useMenu = () => {
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
   const toggleMenu = () => {
     setShowMenu((prevShowMenu) => !prevShowMenu);
-    console.log(showMenu, "showMenu");
   };
 
   return { showMenu, setShowMenu, toggleMenu, router };
@@ -23,7 +29,7 @@ export function formatDate(dateString: string | undefined): string {
   return `${year}/${month}/${day}`;
 }
 
-export const getInitialLoginState = () => {
+export const getInitialLoginState = (): LoginState => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("access_token");
     return {
@@ -53,4 +59,11 @@ export const toggleLoginState = () => {
   };
 
   return handleToggleLogin;
+};
+
+export const randomImageUrl =
+  imageUrls[Math.floor(Math.random() * imageUrls.length)];
+
+export const getRandomImageUrl = () => {
+  return imageUrls[Math.floor(Math.random() * imageUrls.length)];
 };

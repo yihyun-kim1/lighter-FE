@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import "../globals.css";
 import { getCurrentSessions } from "@/api/api";
 import Dropdown from "@/components/Dropdown";
-import { SettingData } from "../../../interface";
+import { SettingData, WritingData } from "../../../interface";
 import { useAtom } from "jotai";
 import {
   accessTokenAtom,
@@ -18,11 +18,10 @@ import { SideMenu } from "@/components/SideMenu";
 export default function ChangeSettings() {
   const router = useRouter();
   const [accessToken] = useAtom(accessTokenAtom);
-  const [currentSessionInfo, setCurrentSessionInfo] = useState<any>({});
+  const [currentSessionInfo, setCurrentSessionInfo] =
+    useState<WritingData | null>(null);
   const { showMenu, setShowMenu, toggleMenu } = useMenu();
-  const [writingTime, setWritingTime] = useState(
-    parseInt(currentSessionInfo?.data?.startAt?.hour) < 12 ? "AM" : "PM"
-  );
+  const [writingTime, setWritingTime] = useState<string>("PM");
   const [editCount, setEditCount] = useState(0);
   const [isChanged, setIsChanged] = useState(false);
   const [loginState, setLoginState] = useAtom(loginAtom);
@@ -35,7 +34,6 @@ export default function ChangeSettings() {
     writingHours: 0,
   });
 
-  const writingInfo = useWritingDataAtom();
   useEffect(() => {
     const fetchUserData = async () => {
       if (!accessToken) {
@@ -44,8 +42,8 @@ export default function ChangeSettings() {
       }
       try {
         const currentSessionInfo = await getCurrentSessions(accessToken);
-        console.log("현재 글쓰기 데이터 정보: ", currentSessionInfo);
         setCurrentSessionInfo(currentSessionInfo);
+
         setChangedData({
           page: currentSessionInfo?.data?.page,
           period: currentSessionInfo?.data?.period,
@@ -65,12 +63,7 @@ export default function ChangeSettings() {
     fetchUserData();
   }, []);
 
-  useEffect(() => {
-    console.log("loginState 변경 ---------", loginState);
-  }, [loginState]);
-
   const changeSessionSettings = async () => {
-    console.log("바꿀 설정 정보: ", changedData);
     if (!accessToken) {
       console.error("Access token is not available");
       return;
@@ -115,17 +108,8 @@ export default function ChangeSettings() {
                     설정
                   </div>
                 </div>
-                <div className="flex text-[15px] lg:text-[20px] cursor-pointer lg:mt-[20px]">
-                  글쓰기 시간을 변경할 수 있어요. (
-                  {writingInfo?.data?.modifyingCount}/3)
-                </div>
-                <div
-                  className="flex text-[14px] cursor-pointer mt-[8px]"
-                  style={{ color: "#918A7C" }}
-                >
-                  *주 최대 2회 변경 가능하며, 설정을 변경한 날은 글을 쓸 수
-                  없어요.
-                  <br />
+                <div className="flex text-[15px] lg:text-[20px] cursor-pointer text-[#918A7C] lg:mt-[20px]">
+                  글쓰기 시간은 세션당 1번만 변경할 수 있어요.
                 </div>
                 <div className="w-[250px] mt-[30px] flex flex-row gap-x-[14px]">
                   <button
